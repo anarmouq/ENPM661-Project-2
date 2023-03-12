@@ -7,7 +7,7 @@ import math
 from matplotlib import pyplot as plt
 
 
-
+#Constant values used in functions below to help graph the hexagon obstacles in the map
 side_length1 = 75
 side_length2 = 80
 center = (300, 125)
@@ -23,9 +23,11 @@ for i in range(6):
     x = center[0] + side_length2 * math.cos(math.pi / 3 * i + math.radians(angle))
     y = center[1] + side_length2 * math.sin(math.pi / 3 * i + math.radians(angle))
     HexVertClea.append((x, y))
+#initiate plot and set lims
 fig, ax = plt.subplots()
 ax.set_xlim([0, 600])
 ax.set_ylim([0, 250])
+#plot the obstacles on the map
 poly_1 = Rectangle((100, 0), 50, 100, linewidth=1, edgecolor='b', facecolor='b')
 clea_1 = Rectangle((95, 0), 60, 105, linewidth=1, edgecolor='r', facecolor='none')
 ax.add_patch(poly_1)
@@ -43,6 +45,7 @@ clea_4 = Polygon(HexVertClea, linewidth=1, edgecolor='r', facecolor='None')
 ax.add_patch(poly_4)
 ax.add_patch(clea_4)
 
+#initiating several lists, sets, and constants to be used later in the code
 Open_List = []
 Closed_List = []
 Closed_Coor = set()
@@ -51,32 +54,6 @@ obstacle_points = set()
 map_points = set()
 x_range = range(0, 650)
 y_range = range(0, 250)
-#each point is saved as follows: (C2C, point_index, (x,y)parent_coordinates, (x,y)coordinates)
-#user input needed to specify goal position coordinates
-# start_x_position = int(input("enter start X position(0-600) "))
-# start_y_position = int(input("enter start y position(0-250) "))
-# start_position = (0, node_index, None, (start_x_position,start_y_position))
-# if start_position[3] in obstacle_points:
-#     print("start point selected is in obstacle space, try again")
-#     print(start_position)
-#     exit()
-# if start_position[3] in map_points:
-#     print("start point selected is  outside the map, try again")
-#     print(start_position)
-#     exit()
-
-#user input needed to specify goal position coordinates
-# goal_x_position = int(input("enter start X position (0-600) "))
-# goal_y_position = int(input("enter start X position (0-250) "))
-# goal_position = (goal_x_position,goal_y_position)
-# if goal_position in obstacle_points or goal_position in map_points:
-#     print("goal point selected is either outside the map or in obstacle space, try again")
-#     exit()
-# if goal_position in map_points:
-#     print("start point selected is  outside the map, try again")
-#     print(start_position)
-#     exit()
-# hq.heappush(Open_List, start_position)
 
 #check if coordinates are within the map
 def boundries (x,y):
@@ -114,7 +91,6 @@ def obs_4 (x, y):
     else: 
         return False
 
-
 #creat 2 sets, 1 containing all the possible points within map, 1 containg all possible points within the obstacle spaces
 #this will be used later to check the created points to see if they can be used
 for x in x_range:
@@ -124,6 +100,7 @@ for x in x_range:
         if obs_1(x, y) or obs_2(x, y) or obs_3(x, y) or obs_4(x, y):
             obstacle_points.add((x, y))
 
+#ask for user input for the start point position, and check if it can be used 
 start_x_position = int(input("enter start X position(0-600) "))
 start_y_position = int(input("enter start y position(0-250) "))
 start_coor = (start_x_position, start_y_position)
@@ -136,7 +113,8 @@ if start_coor not in map_points:
     print("start point selected is  outside the map, try again")
     print(start_position)
     exit()
-
+\
+#ask for user input for the goal point position, and check if it can be used 
 goal_x_position = int(input("enter start X position (0-600) "))
 goal_y_position = int(input("enter start X position (0-250) "))
 goal_position = (goal_x_position,goal_y_position)
@@ -147,6 +125,8 @@ if goal_position not in map_points:
     print("start point selected is  outside the map, try again")
     print(goal_position)
     exit()
+
+#insert the start position node into the Open_List, this will be the first point popped and listed in th Closed list later
 hq.heappush(Open_List, start_position)
 
 #explore point to the right and create a new node
